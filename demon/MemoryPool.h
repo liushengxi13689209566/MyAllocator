@@ -12,6 +12,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <algorithm>
+#include <utility>
 
 namespace Tattoo
 {
@@ -34,11 +36,11 @@ class MemoryPool
 	{
 		typedef MemoryPool<U> other;
 	};
-	MemoryPool() noexcept;								 //默认构造函数
-	MemoryPool(const MemoryPool &) noexcept;			 //拷贝构造函数
-	MemoryPool(MemoryPool &&) noexcept;					 //移动构造函数
-	MemoryPool &operator=(const MemoryPool &) = delete;  //赋值操作符
-	MemoryPool &operator=(const MemoryPool &&) noexcept; //移动赋值操作符
+	MemoryPool() noexcept;								//默认构造函数
+	MemoryPool(const MemoryPool &) noexcept;			//拷贝构造函数
+	MemoryPool(MemoryPool &&) noexcept;					//移动构造函数
+	MemoryPool &operator=(const MemoryPool &) = delete; //赋值操作符
+	MemoryPool &operator=(MemoryPool &&) noexcept;		//移动赋值操作符
 
 	template <class U> //实现重新绑定
 	MemoryPool(const MemoryPool<U> &) noexcept;
@@ -76,7 +78,7 @@ class MemoryPool
 	};
 	typedef char *data_pointer_;
 	typedef Lnode_ *Lnode_pointer_;
-
+	/*待完成，cur_block_ 写为 block_head */
 	Lnode_pointer_ cur_block_;  // 指向当前内存块链表
 	Lnode_pointer_ cur_Lnode_;  // 指向当前元素链表
 	Lnode_pointer_ last_Lnode_; //指向当前元素链表的最后一个对象
@@ -87,8 +89,6 @@ class MemoryPool
 
 	static_assert(BlockSize >= 2 * sizeof(Lnode_), "BlockSize too small !!! ");
 };
-
-#define MEM MemoryPool<T, BlockSize>
 
 } // namespace Tattoo
 #endif
