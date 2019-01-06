@@ -5,7 +5,7 @@
 	> Created Time: 2019年01月05日 星期六 21时45分56秒
  ************************************************************************/
 
-#include "malloc.h"
+#include "../malloc.h"
 #include <stdio.h>
 using namespace std;
 #define RUNS 10000

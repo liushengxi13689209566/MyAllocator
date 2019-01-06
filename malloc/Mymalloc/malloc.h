@@ -5,9 +5,9 @@
 	> Created Time: 2019年01月05日 星期六 21时45分03秒
  ************************************************************************/
 
-#ifndef _MYMALLOC_H
-#define _MYMALLOC_H
-#include <assert.h>
+#ifndef _MALLOC_H
+#define _MALLOC_H
+#include <cassert>
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -18,7 +18,7 @@ class Block
 {
   public:
 	size_t size = 0;
-	bool free = true;
+	bool free = false;
 	int debug = 0;
 };
 
@@ -28,17 +28,18 @@ std::list<Block *> mem_list;
 Block *RequestSpace(size_t size) //需要处理分配异常
 {
 	class Block *block;
-	block = reinterpret_cast<Block *>(sbrk(0));
-	void *request = sbrk(size + BLOCK_SIZE);
-	assert(reinterpret_cast<void *>(block) == request);
+	block = reinterpret_cast<Block *>(sbrk(0));			//得到当前堆顶部的指针
+	void *request = sbrk(size + BLOCK_SIZE);			//sbrk(foo)递增堆大小foo并返回指向堆的上一个顶部的指针
+	assert(reinterpret_cast<void *>(block) == request); //不明白这是为什么？？
 	if (request == reinterpret_cast<void *>(-1))
 	{
 		throw std::bad_alloc();
 		return NULL;
 	}
+	mem_list.push_back(block); //将其放到链表末尾
 	block->size = size;
-	block->free = true;
-	// block->size = size;
+	block->free = false;
+	// block->xxxx = xxx;
 	return block;
 }
 Block *FindFreeBlock(size_t size)
@@ -48,6 +49,7 @@ Block *FindFreeBlock(size_t size)
 		if ((t->free) && (t->size >= size))
 			return t;
 	}
+	return NULL;
 }
 
 void *MyMalloc(size_t size)
@@ -74,8 +76,15 @@ void *MyMalloc(size_t size)
 		}
 	}
 	return (block + 1);
-	/*这是为什么呐？？？？？？？？？？？？？？？？？？？？？？
-	这是因为他申请内存的时候都是sizeof(Block) + size,所以+1，直接让其指向原始内存　*/
+	/*这是为什么？
+	答：这是因为他申请内存的时候都是sizeof(Block) + size,所以+1，直接让其指向原始内存　*/
+}
+void *MyCalloc(size_t n, size_t size)
+{
+	size_t sum_size = n * size;
+	void *ptr = MyMalloc(sum_size);
+	memset(ptr, 0, sum_size);
+	return ptr;
 }
 class Block *GetBlobkPtr(void *ptr)
 {
@@ -88,8 +97,23 @@ void MyFree(void *ptr)
 	else
 	{
 		class Block *block_ptr = GetBlobkPtr(ptr);
-		// assert(block_ptr->free == false);
-		block_ptr->free == true;
+		assert(block_ptr->free == false);
+		block_ptr->free = true;
 	}
 }
+void *MyRealloc(void *ptr, size_t size)
+{
+	if (!ptr)
+	{
+		return MyMalloc(size);
+	}
+	class Block *block = GetBlobkPtr(ptr);
+	if (block->size >= size)
+		return ptr; //空间足够了
+	void *new_ptr = MyMalloc(size);
+	memcpy(new_ptr, ptr, block->size);
+	MyFree(ptr);
+	return new_ptr;
+}
+
 #endif
