@@ -69,14 +69,27 @@ void *MyMalloc(size_t size)
 		}
 		else //找到一块合适的内存块
 		{
-			block->free = true;
+			block->free = false;
 			// block->debug = xxxxxx;
 		}
 	}
-	return (block + 1); //这是为什么呐？？？？？？？？？？？？？？？？？？？？？？
+	return (block + 1);
+	/*这是为什么呐？？？？？？？？？？？？？？？？？？？？？？
+	这是因为他申请内存的时候都是sizeof(Block) + size,所以+1，直接让其指向原始内存　*/
+}
+class Block *GetBlobkPtr(void *ptr)
+{
+	return (class Block *)ptr - 1;
 }
 void MyFree(void *ptr)
 {
+	if (!ptr)
+		return;
+	else
+	{
+		class Block *block_ptr = GetBlobkPtr(ptr);
+		// assert(block_ptr->free == false);
+		block_ptr->free == true;
+	}
 }
-
 #endif
