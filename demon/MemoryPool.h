@@ -82,7 +82,7 @@ class MemoryPool
 	Lnode_pointer_ cur_block_;  // 指向当前内存块链表
 	Lnode_pointer_ cur_Lnode_;  // 指向当前元素链表
 	Lnode_pointer_ last_Lnode_; //指向当前元素链表的最后一个对象
-	Lnode_pointer_ free_Lnode_; //指向当前元素链表的最空闲对象
+	Lnode_pointer_ free_Lnode_; //指向当前元素链表的空闲对象
 
 	size_t alig_mem(data_pointer_ p, size_t align) const noexcept;
 	void allocate_block(); //申请内存快放进内存池

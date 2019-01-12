@@ -17,7 +17,7 @@
 
 using namespace std;
 
-vector<int, MemoryPool<int>> *vecs[N];
+vector<int, Tattoo::MemoryPool<int>> *vecs[N];
 
 int bigr()
 {
@@ -30,7 +30,7 @@ int main()
 
 	clk = clock();
 	for (int i = 0; i < N; i++)
-		vecs[i] = new vector<int, MemoryPool<int>>(bigr() % 1000 + 1);
+		vecs[i] = new vector<int, Tattoo::MemoryPool<int>>(bigr() % 1000 + 1);
 
 	printf("%.3f\n", 1.0 * (clock() - clk) / CLOCKS_PER_SEC);
 
