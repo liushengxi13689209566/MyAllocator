@@ -10,7 +10,7 @@
 namespace Tattoo
 {
 //默认构造函数
-template <typename T, size_t BlockSize>
+template <class T, size_t BlockSize>
 MemoryPool<T, BlockSize>::MemoryPool() noexcept
 {
 	cur_block_ = nullptr;
