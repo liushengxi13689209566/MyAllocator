@@ -17,7 +17,7 @@ int main()
     clock_t start;
 
     std::cout << "Copyright (c) 2013 Cosku Acay, http://www.coskuacay.com\n";
-    std::cout << "Provided to compare the default allocator to MemoryPool.\n\n";
+    std::cout << "Provided to compare the default allocator to Tattoo::MemoryPool.\n\n";
 
     /* Use the default allocator */
     StackAlloc<int, std::allocator<int>> stackDefault;
@@ -45,8 +45,8 @@ int main()
     std::cout << "Default Allocator Time: ";
     std::cout << (((double)clock() - start) / CLOCKS_PER_SEC) << "\n\n";
 
-    /* Use MemoryPool */
-    StackAlloc<int, MemoryPool<int>> stackPool;
+    /* Use Tattoo::Tattoo::MemoryPool */
+    StackAlloc<int, Tattoo::MemoryPool<int>> stackPool;
     start = clock();
     for (int j = 0; j < REPS; j++)
     {
@@ -68,13 +68,13 @@ int main()
             stackPool.pop();
         }
     }
-    std::cout << "MemoryPool Allocator Time: ";
+    std::cout << "Tattoo::Tattoo::MemoryPool Allocator Time: ";
     std::cout << (((double)clock() - start) / CLOCKS_PER_SEC) << "\n\n";
 
     std::cout << "Here is a secret: the best way of implementing a stack"
                  " is a dynamic array.\n";
 
-    /* Compare MemoryPool to std::vector */
+    /* Compare Tattoo::Tattoo::MemoryPool to std::vector */
     std::vector<int> stackVector;
     start = clock();
     for (int j = 0; j < REPS; j++)
@@ -101,7 +101,7 @@ int main()
     std::cout << (((double)clock() - start) / CLOCKS_PER_SEC) << "\n\n";
 
     std::cout << "The vector implementation will probably be faster.\n\n";
-    std::cout << "MemoryPool still has a lot of uses though. Any type of tree"
+    std::cout << "Tattoo::Tattoo::MemoryPool still has a lot of uses though. Any type of tree"
                  " and when you have multiple linked lists are some examples (they"
                  " can all share the same memory pool).\n";
 
